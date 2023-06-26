@@ -22,7 +22,7 @@ Helper<unsigned int> c2 = {          256u,   0u, "testUnsignedInt" };
 Helper<float>        c3 = {         60.1f, 0.0f, "testFloat"       };
 Helper<std::string>  c4 = { "Hello_World",   "", "testString"      };
 
-void compareValues(Config* config)
+void compareValues(ZConfig* config)
 {
 	if (!config->getValue(c1.name, c1.valueToLoad))
 	{
@@ -84,7 +84,7 @@ void resetReadValues()
 void testWriteSave()
 {
 	const std::string CONFIG_FILE = "configToWrite.cfg";
-	Config writeConfig(CONFIG_FILE);
+	ZConfig writeConfig(CONFIG_FILE);
 
 	// Add default values
 	writeConfig.setValue<int>(c1.name, c1.valueToSave);
@@ -113,7 +113,7 @@ void testWriteSave()
 void testReadLoad()
 {
 	const std::string CONFIG_FILE = "configToRead.cfg";
-	Config readConfig(CONFIG_FILE);
+	ZConfig readConfig(CONFIG_FILE);
 
 	readConfig.setValue<int>(c1.name, c1.valueToLoad);
 	readConfig.setValue<unsigned int>(c2.name, c2.valueToLoad);

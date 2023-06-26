@@ -4,13 +4,13 @@
 #include <sstream>
 
 
-class Config
+class ZConfig
 {
 public:
 
 	// All settings are read from and written in the same file.
-	Config(const std::string& filename);
-	~Config();
+	ZConfig(const std::string& filename);
+	~ZConfig();
 
 	// Read all settings from file. Returns false if reading fails (e.g. file does not exist).
 	// Checks for valid entries: each entry must have a default value set with setValue before reading.

@@ -3,15 +3,15 @@
 #include <algorithm>
 #include <cctype>
 
-Config::Config(const std::string& filename): m_filename(filename)
+ZConfig::ZConfig(const std::string& filename): m_filename(filename)
 {
 }
 
-Config::~Config()
+ZConfig::~ZConfig()
 {
 }
 
-bool Config::readFromFile()
+bool ZConfig::readFromFile()
 {
 	std::ifstream file(m_filename.c_str());
 	std::string line;
@@ -30,7 +30,7 @@ bool Config::readFromFile()
 	return false;
 }
 
-bool Config::saveConfig()
+bool ZConfig::saveConfig()
 {
 	std::ofstream file(m_filename.c_str());
 
@@ -59,7 +59,7 @@ bool Config::saveConfig()
 	return false;
 }
 
-void Config::parseLine(std::string & line)
+void ZConfig::parseLine(std::string & line)
 {
 	auto current = line.begin();
     auto removeSpaces = [](const char c) { return std::isspace(c); };
@@ -98,7 +98,7 @@ void Config::parseLine(std::string & line)
 	}
 }
 
-bool Config::isValidKey(const std::string key)
+bool ZConfig::isValidKey(const std::string key)
 {
 	return (key.length() > 0 && m_entries.find(key) != m_entries.end());
 }
