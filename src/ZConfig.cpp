@@ -1,4 +1,4 @@
-#include "Config.h"
+#include "ZConfig.h"
 #include <fstream>
 #include <algorithm>
 #include <cctype>
