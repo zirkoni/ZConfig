@@ -40,7 +40,6 @@ public:
 			is >> value;
 			return true;
 		}
-		
 		return false;
 	}
 
