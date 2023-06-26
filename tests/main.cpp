@@ -1,4 +1,4 @@
-#include "..\include\Config.h"
+#include "Config.h"
 #include <iostream>
 #include <iomanip>
 #include <vector>

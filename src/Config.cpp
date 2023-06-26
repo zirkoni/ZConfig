@@ -1,4 +1,4 @@
-#include "..\include\Config.h"
+#include "Config.h"
 #include <fstream>
 #include <algorithm>
 #include <cctype>
@@ -37,14 +37,15 @@ bool Config::saveConfig()
 	if (file)
 	{
 		auto it = m_entries.begin();
+        auto removeSpaces = [](const char c) { return std::isspace(c); };
 
 		while (it != m_entries.end())
 		{
 			std::string key(it->first);
 			std::string value(it->second);
 
-			key.erase(std::remove_if(key.begin(), key.end(), std::isspace), key.end());
-			value.erase(std::remove_if(value.begin(), value.end(), std::isspace), value.end());
+			key.erase(std::remove_if(key.begin(), key.end(), removeSpaces), key.end());
+			value.erase(std::remove_if(value.begin(), value.end(), removeSpaces), value.end());
 
 			file << key << " = " << value << "\n";
 
@@ -61,7 +62,8 @@ bool Config::saveConfig()
 void Config::parseLine(std::string & line)
 {
 	auto current = line.begin();
-	auto end = std::remove_if(line.begin(), line.end(), std::isspace);
+    auto removeSpaces = [](const char c) { return std::isspace(c); };
+	auto end = std::remove_if(line.begin(), line.end(), removeSpaces);
 
 	std::string key = "";
 	std::string value = "";
