@@ -5,5 +5,8 @@
 *.d
 *.o
 
+# test cfg files
+*.cfg
+
 # Binary
 test_config
