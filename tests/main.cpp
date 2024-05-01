@@ -23,6 +23,7 @@ Helper<int>          c1 = {   -1234567890,    0, "testSignedInt",   "section1"  
 Helper<unsigned int> c2 = {          256u,   0u, "testUnsignedInt", "section2"  };
 Helper<float>        c3 = {         60.1f, 0.0f, "testFloat",       "section1"  };
 Helper<std::string>  c4 = { "Hello World",   "", "testString",      "section2"  };
+Helper<std::string>  c5 = { "Some value",    "", "testString",      "section1"  };
 
 void compareValues(ZConfig* config)
 {
@@ -73,6 +74,18 @@ void compareValues(ZConfig* config)
             ERROR << "value mismatch: " << c4.valueToLoad << " != " << c4.valueToSave;
         }
     }
+
+    if (!config->getValue(c5.section, c5.name, c5.valueToLoad))
+    {
+        ERROR << "c5 not found";
+    }
+    else
+    {
+        if (c5.valueToLoad != c5.valueToSave)
+        {
+            ERROR << "value mismatch: " << c5.valueToLoad << " != " << c5.valueToSave;
+        }
+    }
 }
 
 void resetReadValues()
@@ -81,6 +94,7 @@ void resetReadValues()
     c2.valueToLoad = 0u;
     c3.valueToLoad = 0.0f;
     c4.valueToLoad = "";
+    c5.valueToLoad = "";
 }
 
 void testFileCreation()
@@ -93,6 +107,7 @@ void testFileCreation()
     writeConfig.setValue(c2.section, c2.name, c2.valueToSave);
     writeConfig.setValue(c3.section, c3.name, c3.valueToSave);
     writeConfig.setValue(c4.section, c4.name, c4.valueToSave);
+    writeConfig.setValue(c5.section, c5.name, c5.valueToSave);
 
     // Check defaults
     compareValues(&writeConfig);

@@ -19,16 +19,13 @@ public:
     ZConfig(const std::string& filename);
     ~ZConfig();
 
-    // Read all settings from file. Returns false if reading fails (e.g. file does not exist).
-    // Checks for valid entries: each entry must have a default value set with setValue before reading.
-    // All whitespace is ignored (e.g. "My Key" => "MyKey").
+    // Read all settings from file. Returns false if file does not exist.
     bool readFromFile();
 
     // Save all settings in file (old file is overwritten). Returns false if writing to file fails.
-    // Whitespace in entries is ignored (e.g. "My Value" => "MyValue").
     bool saveConfig();
 
-    // Set config entry: name = value.
+    // Set config entry.
     template<typename T>
     void setValue(const std::string& section, const std::string& name, const T& value)
     {
@@ -37,7 +34,7 @@ public:
         m_config[section][name] = os.str();
     }
 
-    // Get config entry: name = value. Returns false if entry is not found.
+    // Get config entry. Returns false if entry is not found.
     template<typename T>
     bool getValue(const std::string& section, const std::string& name, T& value)
     {
