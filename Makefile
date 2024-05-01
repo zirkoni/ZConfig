@@ -17,7 +17,10 @@ dep    = $(obj:.o=.d)
 test_config: $(obj)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-.PHONY: clean
+test: test_config
+	./test_config
+
+.PHONY: clean test
 clean:
 	rm -f $(obj) test_config
 	rm -f $(dep)

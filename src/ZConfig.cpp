@@ -3,8 +3,11 @@
 #include <algorithm>
 #include <cctype>
 
+#include <iostream>
+
 ZConfig::ZConfig(const std::string& filename): m_filename(filename)
 {
+    m_lastSection = m_config.end();
 }
 
 ZConfig::~ZConfig()
@@ -36,21 +39,15 @@ bool ZConfig::saveConfig()
 
 	if (file)
 	{
-		auto it = m_entries.begin();
-        auto removeSpaces = [](const char c) { return std::isspace(c); };
+        for(const auto& [section, entries] : m_config)
+        {
+            file << SECTION_START << section << SECTION_END << "\n";
 
-		while (it != m_entries.end())
-		{
-			std::string key(it->first);
-			std::string value(it->second);
-
-			key.erase(std::remove_if(key.begin(), key.end(), removeSpaces), key.end());
-			value.erase(std::remove_if(value.begin(), value.end(), removeSpaces), value.end());
-
-			file << key << " = " << value << "\n";
-
-			++it;
-		}
+            for(const auto& [key, value] : entries)
+            {
+                file << key << " = " << value << "\n";
+            }
+        }
 
 		file.close();
 		return true;
@@ -61,44 +58,71 @@ bool ZConfig::saveConfig()
 
 void ZConfig::parseLine(std::string & line)
 {
-	auto current = line.begin();
-    auto removeSpaces = [](const char c) { return std::isspace(c); };
-	auto end = std::remove_if(line.begin(), line.end(), removeSpaces);
+    // Remove leading/trailing whitespace
+    trim(line, WHITESPACE);
 
-	std::string key = "";
-	std::string value = "";
-	bool foundEqual = false;
+    if(isComment(line))
+    {
+        return;
+    } else if(isSection(line))
+    {
+        // Remove section markers
+        ltrim(line, std::string(1, SECTION_START).c_str());
+        rtrim(line, std::string(1, SECTION_END).c_str());
 
-	while (current != end)
-	{
-		if (*current == '#')
-		{
-			break;
-		}
+        auto iter = m_config.find(line);
 
-		if (!foundEqual && *current != '=')
-		{
-			key += *current;
-		}
-		else if (*current == '=')
-		{
-			foundEqual = true;
-		}
-		else
-		{
-			value += *current;
-		}
+        // Init empty section
+        if(iter == m_config.end())
+        {
+            std::map<std::string, std::string> emptyEntry;
+            m_lastSection = m_config.insert(m_config.begin(), std::make_pair(line, emptyEntry));
+        }
 
-		++current;
-	}
+    } else if(m_lastSection != m_config.end())
+    {
 
-	if (isValidKey(key) && value.length() > 0)
-	{
-		m_entries[key] = value;
-	}
+        std::size_t equalSignPosition = line.find("=");
+
+        if(equalSignPosition != std::string::npos)
+        {
+            std::string key = line.substr(0, equalSignPosition);
+            std::string value = line.erase(0, equalSignPosition + 1);
+            trim(key, WHITESPACE);
+            trim(value, WHITESPACE);
+            m_lastSection->second[key] = value;
+        }   
+    }
 }
 
-bool ZConfig::isValidKey(const std::string key)
+std::string& ZConfig::ltrim(std::string& s, const char* t)
 {
-	return (key.length() > 0 && m_entries.find(key) != m_entries.end());
+    s.erase(0, s.find_first_not_of(t));
+    return s;
+}
+
+std::string& ZConfig::rtrim(std::string& s, const char* t)
+{
+    s.erase(s.find_last_not_of(t) + 1);
+    return s;
+}
+
+std::string& ZConfig::trim(std::string& s, const char* t)
+{
+    return ltrim(rtrim(s, t), t);
+}
+
+bool ZConfig::isSection(const std::string& section)
+{
+    if(section.length() > 1)
+    {
+        return (*section.begin() == SECTION_START && *section.rbegin() == SECTION_END);
+    }
+
+    return false;
+}
+
+bool ZConfig::isComment(const std::string& line)
+{
+    return (!line.empty() && line.at(0) == COMMENT_MARKER);
 }

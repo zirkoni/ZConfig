@@ -5,8 +5,8 @@
 *.d
 *.o
 
-# test cfg files
-*.cfg
+# Config file created by test
+tests/configToWrite.cfg
 
 # Binary
 test_config
