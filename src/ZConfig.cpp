@@ -1,9 +1,5 @@
 #include "ZConfig.h"
 #include <fstream>
-#include <algorithm>
-#include <cctype>
-
-#include <iostream>
 
 ZConfig::ZConfig(const std::string& filename): m_filename(filename)
 {
@@ -16,29 +12,29 @@ ZConfig::~ZConfig()
 
 bool ZConfig::readFromFile()
 {
-	std::ifstream file(m_filename.c_str());
-	std::string line;
+    std::ifstream file(m_filename.c_str());
+    std::string line;
 
-	if (file)
-	{
-		while (std::getline(file, line))
-		{
-			parseLine(line);
-		}
+    if (file)
+    {
+        while (std::getline(file, line))
+        {
+            parseLine(line);
+        }
 
-		file.close();
-		return true;
-	}
+        file.close();
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 bool ZConfig::saveConfig()
 {
-	std::ofstream file(m_filename.c_str());
+    std::ofstream file(m_filename.c_str());
 
-	if (file)
-	{
+    if (file)
+    {
         for(const auto& [section, entries] : m_config)
         {
             file << SECTION_START << section << SECTION_END << "\n";
@@ -49,11 +45,11 @@ bool ZConfig::saveConfig()
             }
         }
 
-		file.close();
-		return true;
-	}
+        file.close();
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 void ZConfig::parseLine(std::string & line)

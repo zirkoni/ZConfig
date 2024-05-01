@@ -4,8 +4,6 @@ LDFLAGS  =
 LIBS     =
 
 INCLUDES+=-Isrc
-INCLUDES+=-Iinclude
-
 SRCS+=tests/*.cpp
 SRCS+=src/*.cpp
 CPPFLAGS+=$(INCLUDES)
