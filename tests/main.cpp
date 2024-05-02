@@ -137,6 +137,11 @@ void testReadEditedFile()
     const std::string CONFIG_FILE = "tests/configToRead.cfg";
     ZConfig readConfig(CONFIG_FILE);
 
+    // Add some default values that are overridden after file is read
+    readConfig.setValue(c1.section, c1.name, 1234);
+    readConfig.setValue(c2.section, c2.name, 0);
+    readConfig.setValue(c5.section, c5.name, "Cat");
+
     if (!readConfig.readFromFile())
     {
         ERROR << "ERROR: Reading config " << CONFIG_FILE << " failed!";

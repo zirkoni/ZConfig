@@ -73,6 +73,9 @@ void ZConfig::parseLine(std::string & line)
         {
             std::map<std::string, std::string> emptyEntry;
             m_lastSection = m_config.insert(m_config.begin(), std::make_pair(line, emptyEntry));
+        } else
+        {
+            m_lastSection = iter;
         }
 
     } else if(m_lastSection != m_config.end())
